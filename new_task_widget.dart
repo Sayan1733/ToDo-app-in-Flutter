@@ -32,8 +32,11 @@ class _NewTaskWidgetState extends State<NewTaskWidget> {
     super.initState();
     _model = createModel(context, () => NewTaskModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
+    _model.textController1 ??= TextEditingController();
+    _model.textFieldFocusNode1 ??= FocusNode();
+
+    _model.textController2 ??= TextEditingController();
+    _model.textFieldFocusNode2 ??= FocusNode();
   }
 
   @override
@@ -72,52 +75,121 @@ class _NewTaskWidgetState extends State<NewTaskWidget> {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
               child: TextFormField(
-                controller: _model.textController,
-                focusNode: _model.textFieldFocusNode,
+                controller: _model.textController1,
+                focusNode: _model.textFieldFocusNode1,
                 autofocus: true,
                 obscureText: false,
                 decoration: InputDecoration(
                   labelText: 'Task',
                   labelStyle: FlutterFlowTheme.of(context).labelMedium.override(
                         fontFamily: 'Readex Pro',
+                        color: Color(0xDA4D2919),
                         fontSize: 24,
                       ),
                   hintText: 'Enter your task',
-                  hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                  hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
+                        fontFamily: 'Readex Pro',
+                        color: Color(0xDA4D2919),
+                      ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Color(0xDA4D2919),
                       width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Color(0x7A4D2919),
                       width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: FlutterFlowTheme.of(context).error,
                       width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   focusedErrorBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: FlutterFlowTheme.of(context).error,
                       width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
                       fontFamily: 'Readex Pro',
                       color: Color(0xDA4D2919),
                     ),
-                validator: _model.textControllerValidator.asValidator(context),
+                cursorColor: Color(0xDA4D2919),
+                validator: _model.textController1Validator.asValidator(context),
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional(-1, 0),
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Container(
+                  width: 100,
+                  child: TextFormField(
+                    controller: _model.textController2,
+                    focusNode: _model.textFieldFocusNode2,
+                    autofocus: true,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Date',
+                      labelStyle:
+                          FlutterFlowTheme.of(context).labelMedium.override(
+                                fontFamily: 'Readex Pro',
+                                color: Color(0xDA4D2919),
+                              ),
+                      hintStyle:
+                          FlutterFlowTheme.of(context).labelMedium.override(
+                                fontFamily: 'Readex Pro',
+                                color: Color(0xDA4D2919),
+                              ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xDA4D2919),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x7A4D2919),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                    ),
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Readex Pro',
+                          color: Color(0xDA4D2919),
+                        ),
+                    keyboardType: TextInputType.datetime,
+                    cursorColor: Color(0xDA4D2919),
+                    validator:
+                        _model.textController2Validator.asValidator(context),
+                  ),
+                ),
               ),
             ),
             Expanded(
@@ -130,9 +202,11 @@ class _NewTaskWidgetState extends State<NewTaskWidget> {
                       await ToDoRecord.collection
                           .doc()
                           .set(createToDoRecordData(
-                            task: _model.textController.text,
+                            task: _model.textController1.text,
+                            date: _model.textController2.text,
                           ));
                       context.safePop();
+                      ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
